@@ -1,3 +1,78 @@
+El programa se basa en principios fundamentales de la **teoría musical occidental** y organiza sus funciones para reflejar conceptos clave relacionados con las escalas musicales y los modos. Aquí tienes una explicación más amplia y general:
+
+---
+
+### 1. **Fundamento en la Escala Cromática**
+La escala cromática es la base del programa. Este sistema, usado en la música occidental, contiene 12 notas (o semitonos) por octava. Estas notas incluyen equivalencias enharmónicas, como `C#` y `Db`, que suenan igual pero se escriben diferente. El programa utiliza una lista estructurada para representar estas relaciones, lo que permite trabajar de manera flexible con cualquier representación de una nota.
+
+---
+
+### 2. **Modos Musicales y Patrones de Intervalos**
+Los modos son variaciones de una escala que se originan al reorganizar las notas de una escala mayor. Por ejemplo, `Ionian` es la escala mayor estándar, mientras que `Dorian`, `Phrygian`, y otros modos se construyen ajustando la posición inicial o desplazando los intervalos.
+
+- Cada modo tiene un patrón de distancias (en semitonos) entre sus notas, conocido como **patrón de intervalos**. 
+- El programa define estos patrones y utiliza un sistema de desplazamiento para determinar la posición relativa de cada modo respecto a la escala mayor.
+
+---
+
+### 3. **Construcción de Escalas**
+La creación de escalas es el núcleo del programa:
+- A partir de una nota raíz, el programa sigue el patrón de intervalos del modo seleccionado para identificar las notas que forman la escala.
+- Para garantizar una construcción precisa, utiliza:
+  - La posición de la nota raíz en la escala cromática.
+  - Cálculos matemáticos modulares para recorrer la escala cromática de forma cíclica, asegurando que las notas permanezcan dentro de una octava.
+
+---
+
+### 4. **Roles de Notas e Intervalos**
+Cada nota en una escala tiene un **rol musical**, como "permitido" o "evitado", que depende del contexto del modo:
+- Las notas "permitidas" son características del modo y suelen sonar naturales en la música.
+- Las notas "evitadas" tienen una relación más disonante o inusual con la tónica y requieren cuidado en su uso.
+
+El programa asigna roles a cada nota utilizando una lista predefinida de intervalos y sus nombres (por ejemplo, "Unísono perfecto", "Segunda mayor", etc.).
+
+---
+
+### 5. **Exploración de Modos y Grados**
+El programa no se limita a construir una escala; también explora sus **modos asociados**:
+- Cada grado de una escala puede convertirse en el punto de partida de un nuevo modo.
+- Por ejemplo, si partes de la escala mayor de `C` (`C-D-E-F-G-A-B`):
+  - El primer grado (`C`) es `Ionian`.
+  - El segundo grado (`D`) es `Dorian`.
+  - El tercer grado (`E`) es `Phrygian`, y así sucesivamente.
+
+Esto permite estudiar cómo las relaciones entre notas cambian según el punto de partida.
+
+---
+
+### 6. **Variaciones y Personalización**
+El programa incorpora **variaciones de modos**, lo que lo hace más versátil:
+- Modos como `Mixolydian` pueden modificarse para incluir variaciones específicas (`sus4`, `7(b9,b13)`, etc.).
+- Estas variaciones ajustan los patrones de intervalos y los roles de las notas, ofreciendo herramientas avanzadas para explorar escalas menos comunes.
+
+---
+
+### 7. **Matemática Modular y Cíclica**
+La teoría musical tiene un carácter cíclico: después de 12 semitonos, las notas vuelven a su punto de partida (una octava más alta). El programa utiliza operaciones matemáticas modulares (`% 12`) para manejar esta ciclicidad, asegurando que los cálculos sean consistentes dentro de una octava.
+
+---
+
+### 8. **Estructura Modular y Reutilizable**
+El código está diseñado de manera modular:
+- Las funciones clave (`calculate_root_scale`, `calculate_major_scale`, etc.) son independientes, lo que facilita su comprensión y reutilización.
+- Cada función tiene un propósito específico, como encontrar la nota raíz, construir una escala o explorar modos.
+
+---
+
+### 9. **Aplicaciones del Programa**
+El programa tiene aplicaciones tanto educativas como creativas:
+- **Educación Musical**: Es útil para estudiantes que desean aprender sobre escalas y modos de manera interactiva.
+- **Composición y Análisis**: Ayuda a compositores y teóricos a analizar cómo funcionan los modos y escalas en diferentes contextos.
+- **Exploración Creativa**: Permite experimentar con variaciones y escalas no convencionales.
+
+---
+
+
 ### 1. **Definición de la Escala Cromática**
 
 ```python
