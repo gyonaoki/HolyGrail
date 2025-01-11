@@ -73,7 +73,7 @@ El programa tiene aplicaciones tanto educativas como creativas:
 ---
 
 
-### 1. **Definición de la Escala Cromática**
+### 10. **Definición de la Escala Cromática**
 
 ```python
 chromatic_scale = [
@@ -92,7 +92,7 @@ Esta estructura permite que el programa reconozca automáticamente cualquier rep
 
 ---
 
-### 2. **Definición de Modos y Desplazamientos**
+### 11. **Definición de Modos y Desplazamientos**
 
 ```python
 mode_shifts = {
@@ -112,7 +112,7 @@ El desplazamiento asegura que cada modo comience en el grado correcto de la esca
 
 ---
 
-### 3. **Cálculo de la Nota Raíz Ajustada al Modo**
+### 12. **Cálculo de la Nota Raíz Ajustada al Modo**
 
 #### a. Función `find_root_index`
 ```python
@@ -163,7 +163,7 @@ Resultado:
 
 ---
 
-### 4. **Construcción de Escalas**
+### 13. **Construcción de Escalas**
 #### a. Función `calculate_major_scale`
 ```python
 def calculate_major_scale(root_note, mode="Ionian", ...):
@@ -210,7 +210,7 @@ Pasos detallados:
 
 ---
 
-### 5. **Cálculo de Modos para Cada Grado**
+### 14. **Cálculo de Modos para Cada Grado**
 ```python
 def calculate_modes_for_degrees(root_note, mode):
     root_scale = calculate_root_scale(root_note, mode)
@@ -227,7 +227,7 @@ Pasos detallados:
 
 ---
 
-### 6. **Ejecución Principal**
+### 15. **Ejecución Principal**
 ```python
 if __name__ == "__main__":
     root_note = "C"
