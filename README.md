@@ -48,7 +48,7 @@ Esto permite estudiar cómo las relaciones entre notas cambian según el punto d
 ### 6. **Variaciones y Personalización**
 El programa incorpora **variaciones de modos**, lo que lo hace más versátil:
 - Modos como `Mixolydian` pueden modificarse para incluir variaciones específicas (`sus4`, `7(b9,b13)`, etc.).
-- Estas variaciones ajustan los patrones de intervalos y los roles de las notas, ofreciendo herramientas avanzadas para explorar escalas menos comunes.
+- Estas variaciones ajustan los patrones de intervalos y los roles de las notas, ofreciendo nuevas Chord Scales en el Quinto grado Mixolydian.
 
 ---
 
