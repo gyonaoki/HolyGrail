@@ -1,4 +1,4 @@
-El programa se basa en principios fundamentales de la **teoría musical occidental** y organiza sus funciones para reflejar conceptos clave relacionados con las escalas musicales y los modos. Aquí tienes una explicación más amplia y general:
+El programa se basa en principios fundamentales de la **teoría musical occidental** y organiza sus funciones para reflejar conceptos clave relacionados con las escalas musicales y los modos.
 
 ---
 
