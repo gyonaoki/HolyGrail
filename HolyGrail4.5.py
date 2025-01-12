@@ -1,27 +1,17 @@
-def calculate_root_scale(root_note, mode):
+def calculate_root_scale(root_note, mode, scale_notes=None):
+    """
+    Calcula la nota raíz ajustada al modo especificado y asegura consistencia en la selección de enarmonías.
+    """
     chromatic_scale = [
-        ["C", "B#", "Dbb"],  # 0
-        ["C#", "Db", "B##"],  # 1
-        ["D", "C##", "Ebb"],  # 2
-        ["D#", "Eb", "Fbb"],  # 3
-        ["E", "Fb", "D##"],  # 4
-        ["F", "E#", "Gbb"],  # 5
-        ["F#", "Gb", "E##"],  # 6
-        ["G", "F##", "Abb"],  # 7
-        ["G#", "Ab", "F###"],  # 8
-        ["A", "G##", "Bbb"],  # 9
-        ["A#", "Bb", "Cbb"],  # 10
-        ["B", "Cb", "A##"]   # 11
+        ["C", "B#", "Dbb"], ["C#", "Db", "B##"], ["D", "C##", "Ebb"],
+        ["D#", "Eb", "Fbb"], ["E", "Fb", "D##"], ["F", "E#", "Gbb"],
+        ["F#", "Gb", "E##"], ["G", "F##", "Abb"], ["G#", "Ab", "F###"],
+        ["A", "G##", "Bbb"], ["A#", "Bb", "Cbb"], ["B", "Cb", "A##"]
     ]
 
     mode_shifts = {
-        "Ionian": 0,
-        "Dorian": -2,
-        "Phrygian": -4,
-        "Lydian": 5,
-        "Mixolydian": -7,
-        "Aeolian": -9,
-        "Locrian": -11
+        "Ionian": 0, "Dorian": -2, "Phrygian": -4, "Lydian": 5,
+        "Mixolydian": -7, "Aeolian": -9, "Locrian": -11
     }
 
     if mode not in mode_shifts:
@@ -33,8 +23,25 @@ def calculate_root_scale(root_note, mode):
 
     shift = mode_shifts[mode] % 12
     root_scale_index = (root_index + shift) % 12
-    root_scale_note = chromatic_scale[root_scale_index][0]  # Seleccionar la primera enarmonía
-    return root_scale_note
+    enharmonics = chromatic_scale[root_scale_index]
+
+    # Verificar si scale_notes está definido
+    if scale_notes:
+        # Comparar las enarmonías con las notas de la escala ya calculadas
+        for enharmonic in enharmonics:
+            if enharmonic in scale_notes:
+                print(f"Concordancia encontrada: {enharmonic}")
+                return enharmonic
+
+    # Si no hay concordancia, usar la lógica habitual
+    print(f"No hay concordancia directa. Seleccionando según criterio de letras.")
+    used_letters = {note[0] for note in scale_notes} if scale_notes else set()
+    for enharmonic in enharmonics:
+        if enharmonic[0] not in used_letters:
+            return enharmonic
+
+    # Si no se puede evitar la repetición, usar la primera opción
+    return enharmonics[0]
 
 def find_root_index(chromatic_scale, root_note):
     for i, names in enumerate(chromatic_scale):
@@ -42,17 +49,45 @@ def find_root_index(chromatic_scale, root_note):
             return i
     return None
 
-def calculate_modes_for_degrees(root_note, mode):
-    root_scale = calculate_root_scale(root_note, mode)
-    degrees_modes = ["Ionian", "Dorian", "Phrygian", "Lydian", "Mixolydian", "Aeolian", "Locrian"]
-    base_scale = calculate_major_scale(root_scale, mode="Ionian")
+# Nueva función auxiliar para seleccionar la mejor enarmonía
+def select_enharmonic(options, used_notes):
+    """
+    Selecciona la enarmonía más adecuada basándose en las letras ya usadas.
+    Si ninguna opción evita conflictos, devuelve la primera.
+    """
+    for option in options:
+        if option[0] not in used_notes:
+            return option
+    return options[0]  # Si no hay opciones sin conflictos, usar la primera
 
-    print(f"Escala base (Ionian) desde {root_scale}: {base_scale['notes']}")
-    for i, note in enumerate(base_scale["notes"]):
-        mode_result = calculate_major_scale(note, mode=degrees_modes[i])
-        print(f"Grado {i + 1} ({degrees_modes[i]}):")
-        for n, interval, role in zip(mode_result["notes"], mode_result["intervals"], mode_result["roles"]):
-            print(f"  {n}: {interval} - {role}")
+def calculate_modes_for_degree(root_scale):
+    """
+    Calcula los modos correctamente desde la escala raíz seleccionada.
+    Aplica los desplazamientos modales adecuados y conserva el formato esperado.
+    """
+    print(f"Calculando modos para la escala raíz: {root_scale}")
+
+    # Lista de modos con sus desplazamientos relativos
+    modes = {}
+    mode_names = ["Ionian", "Dorian", "Phrygian", "Lydian", "Mixolydian", "Aeolian", "Locrian"]
+
+    for i, mode_name in enumerate(mode_names):
+        # Calcula el modo aplicando el desplazamiento relativo
+        result = calculate_major_scale(root_scale, mode=mode_name)
+
+        # Guarda los resultados del modo
+        modes[mode_name] = {
+            "notes": result["notes"],
+            "intervals": result["intervals"],
+            "roles": result["roles"],
+        }
+
+        # Formatear salida
+        print(f"Modo {mode_name} desde {root_scale}:")
+        for note, interval, role in zip(result["notes"], result["intervals"], result["roles"]):
+            print(f"  {note}: {interval} - {role}")
+    
+    return modes
 
 def calculate_major_scale(root_note, mode="Ionian", chord_scale_type="standard", variation=None):
     chromatic_scale = [
@@ -253,46 +288,46 @@ def calculate_major_scale(root_note, mode="Ionian", chord_scale_type="standard",
     if root_index is None:
         raise ValueError(f"Nota raíz inválida: {root_note}.")
 
-    scale_notes = []
+    used_letters = set()  # Inicializa el conjunto para evitar repetición de letras
+    scale_notes = []  # Asegura que siempre existe este conjunto
     intervals = []
     roles = []
-    used_letters = set()
 
     for interval, role in sorted(chord_scale_roles.items()):
         current_index = (root_index + interval) % 12
         note_options = chromatic_scale[current_index]
 
-        if interval == 0:
-            note = root_note
-        else:
-            note = note_options[0]
-            for option in note_options:
-                if option[0] not in used_letters:
-                    note = option
-                    break
+        # Selección con criterio de no repetición
+        note = select_enharmonic(note_options, used_letters)
 
         used_letters.add(note[0])
         scale_notes.append(note)
         intervals.append(interval_names.get(interval, "Desconocido"))
         roles.append(role)
 
-    root_scale = calculate_root_scale(root_note, mode)
+    # Pasa scale_notes a calculate_root_scale
+    root_scale = calculate_root_scale(root_note, mode, scale_notes)
 
     return {"notes": scale_notes, "intervals": intervals, "roles": roles, "root_scale": root_scale}
 
 if __name__ == "__main__":
-    root_note = "C"
-    mode = "Ionian"
-    result = calculate_major_scale(root_note, mode=mode)
+    root_note = "G"
+    mode = "Aeolian"
 
+    # Calcula la escala principal
+    result = calculate_major_scale(root_note, mode)
     print(f"Escala {mode} desde {root_note}:")
     for note, interval, role in zip(result["notes"], result["intervals"], result["roles"]):
         print(f"{note}: {interval} - {role}")
-
     print(f"Escala raíz: {result['root_scale']}")
 
-    print("\nCalculando modos de la Escala Raíz:")
-    calculate_modes_for_degrees(root_note, mode)
+    # Calcula los modos desde la raíz seleccionada
+    modes = calculate_modes_for_degree(result["root_scale"])
+    print(f"Modos de la escala raíz ({result['root_scale']}):")
+    for mode_name, details in modes.items():
+        print(f"{mode_name}:")
+        for note, interval, role in zip(details["notes"], details["intervals"], details["roles"]):
+            print(f"  {note}: {interval} - {role}")
 
     # Ejemplo de Mixolydian con variación
     root_note = "G"
